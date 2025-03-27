@@ -1,15 +1,19 @@
 package com.github.basespring.application.base;
 
+import com.github.basespring.application.commons.BeanCopy;
 import com.github.basespring.application.constant.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.http.ResponseEntity;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
+import java.util.List;
 import java.util.Set;
 
+@NoRepositoryBean
 public class BaseResController {
 
     @Autowired
@@ -53,6 +57,34 @@ public class BaseResController {
         PageResponse<Dest> convert = converter.convert(resolver.getData());
         Response<PageResponse<Dest>> response = new Response<>(AppConstants.Message.DEFAULT_SUCCESS, true, convert);
         return ResponseEntity.ok(response);
+    }
+
+    private <DestDt, SrcDt, Src extends Page<SrcDt>> ResponseConverter<Src, PageResponse<DestDt>> getPageConverter(Class<DestDt> dtClass) {
+        return new ResponseConverter<>() {
+            @Override
+            protected PageResponse<DestDt> convert(Src src) {
+                List<DestDt> destDts = BeanCopy.copyCollection(src.getContent(), dtClass);
+                return new PageResponse<>(src, destDts);
+            }
+        };
+    }
+
+    private <Dest, Src> ResponseConverter<Src, Dest> getDetailConverter(Class<Dest> destClass) {
+        return new ResponseConverter<>() {
+            @Override
+            protected Dest convert(Src src) {
+                return BeanCopy.copy(src, destClass);
+            }
+
+        };
+    }
+
+    private <T, E> ResponseEntity<Response<E>> responseConvertDetail(ServiceResolver<T> resolver, Class<E> tClass)  {
+        return response(resolver, getDetailConverter(tClass));
+    }
+
+    protected <T, E> ResponseEntity<Response<PageResponse<E>>> responseConvertPage(ServiceResolver<Page<T>> resolver, Class<E> tClass) {
+        return responsePage(resolver, getPageConverter(tClass));
     }
 
 }
