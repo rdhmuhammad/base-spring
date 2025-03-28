@@ -5,10 +5,10 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = DuplicateEntryUserValidator.class)
+@Constraint(validatedBy = DuplicateEntryConstraint.class)
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DuplicateEntryUserConstraint {
+public @interface DuplicateEntry {
     String message() default "data telah ada";
 
     String columnName() default "";
