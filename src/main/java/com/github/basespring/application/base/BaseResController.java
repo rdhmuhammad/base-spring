@@ -22,8 +22,6 @@ public class BaseResController {
     public BaseResController() {
     }
 
-    ;
-
     protected <T> void validateValue(T request) {
         Set<ConstraintViolation<T>> oks = this.validator.validate(request);
         if (!oks.isEmpty()) {
@@ -79,7 +77,7 @@ public class BaseResController {
         };
     }
 
-    private <T, E> ResponseEntity<Response<E>> responseConvertDetail(ServiceResolver<T> resolver, Class<E> tClass)  {
+    protected  <T, E> ResponseEntity<Response<E>> responseConvertDetail(ServiceResolver<T> resolver, Class<E> tClass)  {
         return response(resolver, getDetailConverter(tClass));
     }
 

@@ -18,4 +18,6 @@ public class UserServiceImpl extends AppService implements UserService {
         userRepository.save(user);
         return success(user);
     }
+
+
 }

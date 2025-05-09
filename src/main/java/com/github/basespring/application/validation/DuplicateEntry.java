@@ -11,7 +11,9 @@ import java.lang.annotation.*;
 public @interface DuplicateEntry {
     String message() default "data telah ada";
 
-    String columnName() default "";
+    String columnName();
+
+    Class<?> constraint();
 
     Class<?>[] groups() default {};
 

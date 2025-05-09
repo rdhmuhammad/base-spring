@@ -1,30 +1,25 @@
 package com.github.basespring.application.validation;
 
-import com.github.basespring.application.base.BaseEntity;
-import com.github.basespring.application.base.BaseRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-@Component
 public class DuplicateEntryConstraint
         implements ConstraintValidator<DuplicateEntry, String> {
 
+
     private String columns;
 
-    private final List<Module> modules = new ArrayList<>();
+    @Autowired
+    private DuplicateEntryModule modules;
 
-    public void addModule(Class<? extends  BaseEntity> entity, BaseRepository<?, ?> repository, Class<?> dto) {
-        this.modules.add(new Module(entity, repository, dto));
-    }
+    private Class<?> constraintClass;
 
     public DuplicateEntryConstraint() {
     }
@@ -36,6 +31,10 @@ public class DuplicateEntryConstraint
             Object invoke = columnName.invoke(constraint);
             String cols = String.valueOf(invoke);
             if (!cols.isEmpty()) columns = cols;
+
+            Method request = constraint.annotationType().getMethod("constraint");
+            Object invokeRequest = request.invoke(constraint);
+            constraintClass = (Class<?>) invokeRequest;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -62,16 +61,16 @@ public class DuplicateEntryConstraint
     }
 
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Class<?> containingClass = getContainingClass(context);
-        for (Module module : this.modules) {
-            if (module.getDtoClass() == containingClass) {
+//        Class<?> containingClass = getContainingClass(context);
+        for (DuplicateEntryModule.Item module : modules.getItems()) {
+            if (module.getDtoClass() == constraintClass) {
                 boolean exists = module.getRepo()
                         .exists((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(columns.isEmpty() ? getFieldName(context): columns), value));
                 return !exists;
             }
         }
 
-        log.error("Invalid class type => no class {} found to validate", containingClass.getName());
+        log.error("Invalid class type => no class {} found to validate", constraintClass.getName());
 
         return false;
     }
