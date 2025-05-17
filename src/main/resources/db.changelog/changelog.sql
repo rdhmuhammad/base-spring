@@ -17,3 +17,16 @@ create table user
     modified_date   TIMESTAMP NULL,
 
 )
+
+--changeset ridho:create-table-config
+CREATE TABLE app_configs
+(
+    id            SMALLINT PRIMARY KEY NOT NULL,
+    created_by    VARCHAR(200) NULL,
+    created_date  TIMESTAMP            NOT NULL,
+    modified_by   VARCHAR(200) NULL,
+    modified_date TIMESTAMP NULL,
+    is_deleted    BOOLEAN              NOT NULL DEFAULT FALSE,
+    key           VARCHAR(100)         NOT NULL,
+    value         VARCHAR(100)         NOT NULL
+);

@@ -8,11 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 
@@ -20,6 +23,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.*;
 
+@RestControllerAdvice
 public class AdvisorController {
 
     private final Logger logger = LoggerFactory.getLogger(AdvisorController.class);
@@ -119,5 +123,27 @@ public class AdvisorController {
         return response;
     }
 
+
+    @ExceptionHandler(value = BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response valueValidateException(BindException ex) {
+        logger.error("exception ConstraintViolation {}", ex.getMessage(), ex);
+
+        FieldError fieldError = ex.getFieldError();
+        String errMsg = "";
+        if (Objects.nonNull(fieldError)) {
+            String $1 = fieldError.getField()
+                    .toLowerCase()
+                    .replaceAll("([A-Z])", "$1");
+            String $2 = fieldError.getDefaultMessage();
+            errMsg = $1 + " " + $2;
+        }
+
+
+        Response response = new Response();
+        response.setCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessages(errMsg);
+        return response;
+    }
 
 }

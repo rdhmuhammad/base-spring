@@ -3,15 +3,20 @@ package com.github.basespring.application.configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 
+import javax.print.attribute.standard.Media;
 import javax.sql.DataSource;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 @Configuration
@@ -35,6 +40,7 @@ public class AppBean {
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
 
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -43,6 +49,18 @@ public class AppBean {
         dataSource.setPassword(password);
         dataSource.setDriverClassName(driverClassName);
         return dataSource;
+    }
+
+
+    // Supporting Media Type Multipart
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setSupportedMediaTypes(Arrays.asList(
+                MediaType.APPLICATION_OCTET_STREAM,
+                MediaType.MULTIPART_FORM_DATA,
+                MediaType.APPLICATION_JSON));
+        return converter;
     }
 
     @Bean

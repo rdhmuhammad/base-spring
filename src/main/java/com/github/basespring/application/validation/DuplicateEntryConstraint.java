@@ -61,7 +61,6 @@ public class DuplicateEntryConstraint
     }
 
     public boolean isValid(String value, ConstraintValidatorContext context) {
-//        Class<?> containingClass = getContainingClass(context);
         for (DuplicateEntryModule.Item module : modules.getItems()) {
             if (module.getDtoClass() == constraintClass) {
                 boolean exists = module.getRepo()

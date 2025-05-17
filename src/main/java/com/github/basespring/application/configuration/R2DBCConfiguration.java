@@ -35,15 +35,13 @@ public class R2DBCConfiguration {
     private String password;
 
 
-    @Bean
-    public ReactiveUserRepository configRepository() {
-        return r2dbcRepositoryFactory().getRepository(ReactiveUserRepository.class);
-    }
+//    @Bean
+//    public ReactiveUserRepository reactiveUserRepository() {
+//        return r2dbcRepositoryFactory().getRepository(ReactiveUserRepository.class);
+//    }
 
     @Bean
     public R2dbcRepositoryFactory r2dbcRepositoryFactory() {
-//        RelationalMappingContext mappingContext = new RelationalMappingContext();
-//        mappingContext.afterPropertiesSet();
         return new R2dbcRepositoryFactory(r2dbc(), new DefaultReactiveDataAccessStrategy(new PostgresDialect()));
     }
 

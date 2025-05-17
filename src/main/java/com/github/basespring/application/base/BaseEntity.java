@@ -1,6 +1,7 @@
 package com.github.basespring.application.base;
 
 
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;

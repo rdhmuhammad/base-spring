@@ -4,7 +4,9 @@ import com.github.basespring.application.base.ServiceResolver;
 import com.github.basespring.repository.api.request.RegisterRequest;
 import com.github.basespring.repository.database.dao.User;
 
+import java.io.IOException;
+
 public interface UserService {
 
-    ServiceResolver<User> register(RegisterRequest request);
+    ServiceResolver<User> register(RegisterRequest request) throws IOException;
 }

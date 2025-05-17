@@ -5,6 +5,7 @@ import com.github.basespring.application.base.BaseRepository;
 import com.github.basespring.application.validation.DuplicateEntryModule;
 import com.github.basespring.application.validation.EnableDuplicateConstraint;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
@@ -19,30 +20,42 @@ import java.util.Map;
 import java.util.Set;
 
 @Configuration
+@Slf4j
 public class DuplicateEntryConfiguration {
 
     private final Map<Class<?>, EntityRepositoryPair> entityRepoMap = new HashMap<>();
-    private final ApplicationContext applicationContext;
 
     @Getter
     private static final class EntityRepositoryPair {
         private final Class<? extends BaseEntity> entity;
 
         private final Class<? extends BaseRepository<?, ?>> repository;
+
         public EntityRepositoryPair(Class<? extends BaseEntity> entity, Class<? extends BaseRepository<?, ?>> repository) {
             this.entity = entity;
             this.repository = repository;
         }
     }
 
+    @Autowired
+    private BasicPackageNameFinder nameFinder;
+
+    protected ApplicationContext applicationContext;
+
+
+    @Autowired
+    public DuplicateEntryConfiguration(ApplicationContext context) throws ClassNotFoundException {
+        log.info("Initializing duplicate entry configuration");
+        this.applicationContext = context;
+    }
+
     @PostConstruct
     public void scanAnnotatedRequests() throws ClassNotFoundException {
-        String basePackage = "com.asliri.rnd.repository.api.request";
 
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
         scanner.addIncludeFilter(new AnnotationTypeFilter(EnableDuplicateConstraint.class));
 
-        Set<BeanDefinition> candidateComponents = scanner.findCandidateComponents(basePackage);
+        Set<BeanDefinition> candidateComponents = scanner.findCandidateComponents(nameFinder.basePackageName);
 
         for (BeanDefinition candidateComponent : candidateComponents) {
             Class<?> aClass = Class.forName(candidateComponent.getBeanClassName());
@@ -53,12 +66,6 @@ public class DuplicateEntryConfiguration {
                         new EntityRepositoryPair(annotation.entity(), annotation.repo()));
             }
         }
-    }
-
-
-    @Autowired
-    public DuplicateEntryConfiguration(ApplicationContext context){
-        this.applicationContext = context;
     }
 
 
