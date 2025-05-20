@@ -2,8 +2,8 @@ package com.github.basespring.application.configuration;
 
 import com.github.basespring.application.base.BaseEntity;
 import com.github.basespring.application.base.BaseRepository;
-import com.github.basespring.application.validation.DuplicateEntryModule;
-import com.github.basespring.application.validation.EnableDuplicateConstraint;
+import com.github.basespring.application.validation.duplicateentry.DuplicateEntryModule;
+import com.github.basespring.application.validation.duplicateentry.EnableDuplicateConstraint;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

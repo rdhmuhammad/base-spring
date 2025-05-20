@@ -1,11 +1,9 @@
-package com.github.basespring.repository.database.repo;
+package com.github.basespring.repository.database.repo.jdbc;
 
 import com.github.basespring.application.base.BaseRepository;
-import com.github.basespring.repository.database.dao.Config;
-import com.github.basespring.repository.database.dao.User;
+import com.github.basespring.repository.database.dao.jdbc.Config;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository

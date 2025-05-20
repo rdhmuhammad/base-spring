@@ -1,11 +1,10 @@
 package com.github.basespring.controller;
 
 import com.github.basespring.application.app.AppController;
-import com.github.basespring.application.base.BaseEntity;
 import com.github.basespring.application.base.ServiceResolver;
 import com.github.basespring.repository.api.request.RegisterRequest;
 import com.github.basespring.repository.api.response.RegisterResponse;
-import com.github.basespring.repository.database.dao.User;
+import com.github.basespring.repository.database.dao.jdbc.User;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

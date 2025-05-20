@@ -1,7 +1,8 @@
-package com.github.basespring.application.validation;
+package com.github.basespring.application.validation.duplicateentry;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -60,6 +61,7 @@ public class DuplicateEntryConstraint
         }
     }
 
+    @Async
     public boolean isValid(String value, ConstraintValidatorContext context) {
         for (DuplicateEntryModule.Item module : modules.getItems()) {
             if (module.getDtoClass() == constraintClass) {

@@ -1,4 +1,4 @@
-package com.github.basespring.repository.database.dao;
+package com.github.basespring.repository.database.dao.jdbc;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

@@ -1,6 +1,7 @@
 package com.github.basespring.application.configuration;
 
-import com.github.basespring.repository.database.reporeactive.ReactiveUserRepository;
+import com.github.basespring.application.base.BaseR2dbcRepository;
+import com.github.basespring.application.base.BaseR2dbcRepositoryFactoryBean;
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,8 @@ import org.springframework.data.r2dbc.repository.support.R2dbcRepositoryFactory;
 import org.springframework.r2dbc.core.DatabaseClient;
 
 @Configuration
-@EnableR2dbcRepositories
+@EnableR2dbcRepositories(
+        repositoryFactoryBeanClass = BaseR2dbcRepositoryFactoryBean.class)
 @RequiredArgsConstructor
 public class R2DBCConfiguration {
 
@@ -34,11 +36,6 @@ public class R2DBCConfiguration {
     @Value("${spring.r2dbc.password}")
     private String password;
 
-
-//    @Bean
-//    public ReactiveUserRepository reactiveUserRepository() {
-//        return r2dbcRepositoryFactory().getRepository(ReactiveUserRepository.class);
-//    }
 
     @Bean
     public R2dbcRepositoryFactory r2dbcRepositoryFactory() {

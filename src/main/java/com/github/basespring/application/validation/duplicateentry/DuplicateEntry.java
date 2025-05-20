@@ -1,4 +1,4 @@
-package com.github.basespring.application.validation;
+package com.github.basespring.application.validation.duplicateentry;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

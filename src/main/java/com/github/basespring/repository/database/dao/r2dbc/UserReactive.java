@@ -1,20 +1,16 @@
-package com.github.basespring.repository.database.dao;
+package com.github.basespring.repository.database.dao.r2dbc;
+
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.github.basespring.application.base.BaseEntity;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
 @Table(name="users")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
-public class User extends BaseEntity {
+public class UserReactive {
     @Id
     private Long id;
 

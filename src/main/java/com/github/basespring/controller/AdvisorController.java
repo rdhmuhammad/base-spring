@@ -1,6 +1,7 @@
 package com.github.basespring.controller;
 
 import com.github.basespring.application.base.Response;
+import com.github.basespring.application.commons.StringUtils;
 import com.github.basespring.application.exceptions.DataNotFoundException;
 import com.github.basespring.application.exceptions.InvalidDataException;
 import com.github.basespring.application.exceptions.UnautorizedExecption;
@@ -8,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -132,9 +132,7 @@ public class AdvisorController {
         FieldError fieldError = ex.getFieldError();
         String errMsg = "";
         if (Objects.nonNull(fieldError)) {
-            String $1 = fieldError.getField()
-                    .toLowerCase()
-                    .replaceAll("([A-Z])", "$1");
+            String $1 = StringUtils.toCapitalizeWord(fieldError.getField());
             String $2 = fieldError.getDefaultMessage();
             errMsg = $1 + " " + $2;
         }

@@ -1,4 +1,4 @@
-package com.github.basespring.application.validation;
+package com.github.basespring.application.validation.duplicateentry;
 
 import com.github.basespring.application.base.BaseEntity;
 import com.github.basespring.application.base.BaseRepository;
