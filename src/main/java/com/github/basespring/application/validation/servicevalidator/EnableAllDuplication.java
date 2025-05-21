@@ -8,5 +8,4 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EnableAllDuplication {
-    Class<? extends BaseEntity> entity();
 }

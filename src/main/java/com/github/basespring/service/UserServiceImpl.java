@@ -18,7 +18,7 @@ import java.io.IOException;
 public class UserServiceImpl extends AppService implements UserService {
     @Override
     public ServiceResolver<User> register(RegisterRequest request) throws IOException {
-        ValidationResult validationResult = validateDuplication(userRepository, request);
+        ValidationResult validationResult = validateDuplication(User.class, request);
         if (!validationResult.getIsValid()){
             throw new InvalidDataException(validationResult.getMessage());
         }
