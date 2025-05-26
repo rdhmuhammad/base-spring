@@ -42,7 +42,7 @@ public class AllColDuplicateEntryValidation<T, E extends BaseEntity> extends Val
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = cb.createTupleQuery();
-        Root<E> rootMain = query.from(entity);
+        query.from(entity);
 
 
         List<Selection<Boolean>> subSelection = new ArrayList<>();
@@ -60,8 +60,16 @@ public class AllColDuplicateEntryValidation<T, E extends BaseEntity> extends Val
 
         query.multiselect(subSelection.toArray(new Selection[0]));
 
-        Object singleResult = entityManager.createQuery(query).getResultList();
-        log.info("singleResult: {}", singleResult);
+        Tuple singleResult = entityManager.createQuery(query).setMaxResults(1).getSingleResult();
+        try {
+            for (String fieldName : byClass) {
+                if (Boolean.TRUE.equals(singleResult.get("exist" + StringUtils.capitalize(fieldName)))) {
+                    return ValidationResult.invalid(String.format("duplicated value %s on field %s", beanWrapper.getPropertyValue(fieldName), StringUtils.capitalize(fieldName)));
+                }
+            }
+        } catch (Exception e) {
+            log.error("ALL-COL-VALIDATION-ERROR -> {}", e.getMessage());
+        }
 
         return ValidationResult.valid();
     }
