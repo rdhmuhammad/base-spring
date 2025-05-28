@@ -13,6 +13,14 @@ public class ValidationResult {
         this.message = message;
     }
 
+    public boolean isInvalid(){
+        return Boolean.FALSE.equals(this.isValid);
+    }
+
+    public boolean isValid(){
+        return Boolean.TRUE.equals(this.isValid);
+    }
+
     public static ValidationResult valid() {
         return new ValidationResult(true, null);
     }

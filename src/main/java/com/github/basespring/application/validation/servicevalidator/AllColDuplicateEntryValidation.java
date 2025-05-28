@@ -1,33 +1,25 @@
 package com.github.basespring.application.validation.servicevalidator;
 
 import com.github.basespring.application.base.BaseEntity;
-import com.github.basespring.application.base.BaseRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
 public class AllColDuplicateEntryValidation<T, E extends BaseEntity> extends ValidationStep<T> {
 
-    private Class<E> entity;
+    private final Class<E> entity;
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
-    private RequestClassLoader requestClassLoader;
+    private final RequestClassLoader requestClassLoader;
 
     public AllColDuplicateEntryValidation(Class<E> entity, EntityManager entityManager, RequestClassLoader requestClassLoader) {
         this.entity = entity;
@@ -36,7 +28,7 @@ public class AllColDuplicateEntryValidation<T, E extends BaseEntity> extends Val
     }
 
     @Override
-    public ValidationResult validate(T input) {
+    protected ValidationResult validate(T input) {
         List<String> byClass = requestClassLoader.findByClass(input.getClass());
         BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(input);
 

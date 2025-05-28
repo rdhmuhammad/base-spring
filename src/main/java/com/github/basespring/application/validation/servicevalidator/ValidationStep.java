@@ -1,7 +1,5 @@
 package com.github.basespring.application.validation.servicevalidator;
 
-import com.github.basespring.application.base.BaseRepository;
-
 public abstract class ValidationStep<T> {
 
     private ValidationStep<T> next;
@@ -20,13 +18,22 @@ public abstract class ValidationStep<T> {
         return this;
     }
 
-    public abstract ValidationResult validate(T input);
-
-    protected ValidationResult validateNext(T input) {
-        if (next == null) {
-            return ValidationResult.valid();
+    public ValidationResult getResult(T input) {
+        ValidationResult validate = this.validate(input);
+        if (validate.isInvalid()) return validate;
+        if (this.next == null) {
+            return validate;
+        }
+        ValidationStep<T> lastNext = this.next;
+        while (lastNext != null) {
+            validate = lastNext.validate(input);
+            if (validate.isInvalid()) return validate;
+            lastNext = lastNext.next;
         }
 
-        return next.validate(input);
+        return validate;
     }
+
+
+    protected abstract ValidationResult validate(T input);
 }

@@ -1,6 +1,7 @@
 package com.github.basespring.application.validation.servicevalidator;
 
 
+import com.github.basespring.application.commons.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,6 +48,7 @@ public class RequestClassLoader {
                 if (annotation != null) {
                     String colDb = field.getName();
                     if (!annotation.columnName().equals("NOT_DEFINED")) {
+                        StringUtils.toSnakeCase(colDb);
                         colDb = annotation.columnName();
                     }
 
