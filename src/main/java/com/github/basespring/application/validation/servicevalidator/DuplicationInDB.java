@@ -11,4 +11,6 @@ public @interface DuplicationInDB {
     String message() default "data telah ada";
 
     String columnName() default "NOT_DEFINED";
+
+    Class<?> entity() default DefaultEntity.class;
 }

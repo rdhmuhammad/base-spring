@@ -46,7 +46,6 @@ public class ExcelUtil {
     public static UtilBuilder builder() {
         return new UtilBuilder()
                 .classCache(new ConcurrentHashMap<>());
-
     }
 
     @Data

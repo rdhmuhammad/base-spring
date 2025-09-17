@@ -2,6 +2,7 @@ package com.github.basespring.controller;
 
 import com.github.basespring.application.app.AppController;
 import com.github.basespring.application.base.ServiceResolver;
+import com.github.basespring.application.validation.servicevalidator.DefaultEntity;
 import com.github.basespring.repository.api.request.RegisterRequest;
 import com.github.basespring.repository.api.response.RegisterResponse;
 import com.github.basespring.repository.database.dao.jdbc.User;
@@ -23,4 +24,5 @@ public class UserController extends AppController {
         ServiceResolver<User> resolver = userService.register(request);
         return responseConvertDetail(resolver, RegisterResponse.class);
     }
+
 }

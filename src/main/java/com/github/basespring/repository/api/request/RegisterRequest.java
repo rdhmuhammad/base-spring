@@ -29,6 +29,9 @@ public class RegisterRequest {
 
     private String address;
 
+    @DuplicationInDB()
+    private String companyId;
+
     @NotNull(message = "File cannot be null")
     private MultipartFile profilePicture;
 }
